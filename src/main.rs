@@ -1,21 +1,21 @@
 #![windows_subsystem = "windows"]
 
-use fltk::{prelude::*, *};
 use fltk::button::Button;
+use fltk::{prelude::*, *};
 
-
-fn main()
-{
+fn main() {
     let app = app::App::default().with_scheme(app::Scheme::Gleam);
-    let mut wind = window::Window::default().with_size(1000, 600).with_label("Highlight(\\hl{}) In Latex Remover");
+    let mut wind = window::Window::default()
+        .with_size(1000, 600)
+        .with_label("Highlight(\\hl{}) In Latex Remover");
     wind.make_resizable(true);
     let buf1 = text::TextBuffer::default();
-    let mut editor = text::TextEditor::default().with_size(wind.width() / 2 - 20, wind.height())
+    let mut editor = text::TextEditor::default()
+        .with_size(wind.width() / 2 - 20, wind.height())
         .with_pos(0, 0);
 
     editor.set_buffer(buf1);
     editor.wrap_mode(text::WrapMode::AtBounds, 0);
-
 
     let mut txt = text::TextDisplay::default()
         .with_size(wind.width() / 2 - 20, wind.height())
@@ -30,7 +30,9 @@ fn main()
     but.set_callback(move |_| {
         // println!("{}", editor.buffer().unwrap().text());
         let mut source = editor.buffer().unwrap().text();
-        txt.buffer().unwrap().remove(0, txt.buffer().unwrap().length());
+        txt.buffer()
+            .unwrap()
+            .remove(0, txt.buffer().unwrap().length());
 
         txt.buffer().unwrap().append(transform(&mut source));
     });
@@ -38,7 +40,6 @@ fn main()
     wind.show();
     app.run().unwrap();
 }
-
 
 fn transform(content: &mut String) -> &str {
     loop {
@@ -51,17 +52,19 @@ fn transform(content: &mut String) -> &str {
                 content.remove(start); // remove h
                 content.remove(start); // remove l
                 content.remove(start); // remove {
-                // println!("{start}");
+                                       // println!("{start}");
                 let mut stack = vec![];
                 stack.push('{');
                 let bytes = content.as_bytes();
                 while !stack.is_empty() {
                     start += 1;
-                    if bytes[start] == 123u8 // {
+                    if bytes[start] == 123u8
+                    // {
                     {
                         stack.push('{');
                     }
-                    if bytes[start] == 125u8 //}
+                    if bytes[start] == 125u8
+                    //}
                     {
                         stack.pop();
                     }
