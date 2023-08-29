@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 fltk = "1.4.9"
+regex = "*"
 #fltk-table = "0.3.0"
